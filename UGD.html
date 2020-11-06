@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="vue.js"></script>
+    <title>Unguided 1</title>
+    
+</head>
+
+<body>
+    
+<div class="view" id="app">
+    <form name="form">
+
+      <div class="div" v-if="path == '.'">
+        <center>
+          <FONT size="5">Aku punya satu angka 1 sampai 10, Bisakah kamu menebaknya?</FONT>
+          <BR></BR>
+          <output id="myOutput" name="x"></output>
+          <br>
+          <FONT size="4">Guess now:</FONT>
+          <INPUT v-model="guess" TYPE="text" NAME="input" autofocus="autofocus" size="15"></INPUT>
+          <input button class="button button1" @click="checkInput()" value="   Check   "/>
+          <BR></BR>
+          <BR></BR>
+          <div class="author" ALIGN="right"><a @click="showNumberToGuess()">.</a></div>
+        </center>
+      </div>
+
+
+      <div class="div" v-if="path == 'greater'">
+        <center>
+          <FONT size="5" color="Darkslateblue">Your number is too high</FONT>
+          <BR></BR>
+          <FONT size="4">Guess now:</FONT>
+          <INPUT v-model="guess" TYPE="text" NAME="input" size="15" autofocus="autofocus"></INPUT>
+          <input button class="button button1" @click="checkInput()" value="   Check   "/>
+        </center>
+      </div>
+
+      <div class="div" v-if="path == 'less'">
+        <center>
+          <FONT size="5" color="Darkslateblue">Your number is too low</FONT>
+          <BR></BR>
+          <FONT size="4">Guess now:</FONT>
+          <INPUT v-model="guess" TYPE="text" NAME="input" size="15" autofocus="autofocus"></INPUT>
+          <input button class="button button1" @click="checkInput()" value="   Check   "/>
+        </center>
+      </div>
+
+
+      <div class="div" v-if="path == 'victory'">
+          <FONT size="6" color="Darkslateblue">
+            <br>
+            <center>
+              <B>Congratulations</B>, Tebakan kamu benar!
+              <br>
+              <img src="200_d.gif" alt="congrats">
+          </FONT>
+          <br>
+          <p>Kamu menebaknya dalam {{ i }} attempt(s)</p>
+          <br>
+          <input button class="button button1" name="again" value="   Play again " @click="reload()"/>
+        </center>
+      </div>
+
+
+      <div class="div" v-if="path == 'lost'">
+        <center>
+          <font size="6" color="Darkslateblue">Kamu sudah pakai 3 kesempatan, tapi masih </font>
+          <font size="6" color="Red"> belum </font>
+          <font size="6" color="Darkslateblue">menebak angkaku. Angkaku adalah {{ n }} </font>
+          <br/>
+          <br>
+          <input button class="button button1" name="again" value="   Play again " @click="reload"/>
+        </center>
+      </div>
+
+      
+      <center>
+        <br><br><br><br>
+        <footer>
+          <p>Kamu sudah menggunakan {{ i }} attempt(s)</p>
+          {{ `${creator.nama} | ${creator.kelas} | ${creator.npm}` }}
+        </footer>
+      </center>
+
+      <font size="6" color="Darkslateblue"> {{ n }} </font>
+
+
+    </form>
+  </div>
+
+  <style>
+    html, body {
+    box-sizing: border-box; 
+    height: 100%;
+    padding: 25px;
+    background-color: #ffaeee;
+    }
+    #app{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    }
+  </style>
+
+<script>
+    let app = new Vue(
+  {
+    el: '#app',
+    data: {
+      n: -1,
+      i: 0,
+      path: '.',
+      guess : '',
+      creator: {
+                nama: 'Revel Kristian Sutanto',
+                npm: '180709810',
+                kelas: 'A',
+            }
+    },
+    
+    methods: {
+      setRndNumber: function() {
+        do {
+          this.n = Math.ceil(Math.random()*10);
+        } while (this.n>10 || this.n<1);
+      },
+
+      checkInput : function(input) {
+		    if (this.n == -1)
+			    this.setRndNumber();			  
+        
+        let num = parseInt(this.guess);
+        this.guess = '';
+        num=Math.ceil(num);
+
+        if (num>=1 && num<=10) 
+        {
+          ++this.i;
+          if (num == this.n) 
+          {
+            this.path = "victory";
+          }
+          else 
+          {
+            if (this.i==3) 
+            {
+             this.path = "lost";
+            }
+
+            else 
+            {
+              if (num>this.n) 
+              {
+                this.path = "greater";
+              };
+
+              if (num<this.n) 
+              {
+                this.path ="less";
+              };
+            }
+          };
+          form.reset ();
+        }
+        else {
+          alert('The number should be between 1 and 10.');
+          form.reset ();
+        }
+      },
+
+      showNumberToGuess: function() {
+    		alert('Jawabannya ' + this.n);
+      },
+      
+      reload: function() {
+        this.path = ".";
+        this.setRndNumber();
+        this.i = 0;
+      }      
+    }
+  }
+);
+app.setRndNumber();
+</script>
+</body>
+</html>
