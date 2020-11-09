@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="vue.js"></script>
+
+    
+    <title>PAW Vue JS</title>
+    
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>To-Do List</h1>
+
+            <div class="scrollable">
+                <div v-for="(item, index) in items" :key="index">
+                    <div class="todoItem">
+                        <a class="fa fa-times" href="#" @click="hapusTodo(index)" style="float: right;"></a>
+                        <div class="prioritas">
+                            <span v-if="item.prioritas == 'Penting'">
+                                <div class="penting">{{ item.prioritas }}</div>
+                            </span>
+                            <span v-if="item.prioritas == 'Tidak penting'">
+                                <div class="tidakPenting">{{ item.prioritas }}</div>
+                            </span>
+                            <span v-if="item.prioritas == 'Biasa'">
+                                <div class="biasa">{{ item.prioritas }}</div>
+                            </span>
+                        </div>
+                        <h4>{{ item.nama }}</h4>
+                        <h5>{{ item.catatan }}</h5>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Buat To Do List Baru</h1>
+                <form @submit="tambahTodo" onsubmit="return false">
+                    <div class="form-group">
+                        <label for="nama">Judul To-Do</label>
+                        <input type="text" class="form-control" id="nama" v-model="item.nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="prioritas">Prioritas</label>
+                        <select class="form-control" id="prioritas" v-model="item.prioritas" required>
+                            <option value="Penting">Penting</option>
+                            <option value="Biasa">Biasa</option>
+                            <option value="Tidak penting">Tidak penting</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="catatan">Deskripsi</label>
+                        <textarea class="form-control" rows="3" id="catatan" v-model="item.catatan" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button name="resetInput" class="btn btn-secondary" @click="resetInput">Reset</button><button name="tambahTodo" class="btn btn-primary" type="submit">Tambah</button>
+                    </div>
+                </form>
+        </div>
+
+        <div class="footer">
+            <p>{{ mahasiswa.nama }} | {{ mahasiswa.NPM }} | {{ mahasiswa.kelas }}</p> 
+        </div>
+        
+    </div>
+    <script>
+        const app = new Vue({
+            el: "#app",
+            data: {
+                mahasiswa: {
+                    nama: "Revel Kristian Sutanto",
+                    NPM: "180709810",
+                    kelas: "A",
+                },
+                items: [
+                    {
+                        nama: 'Game',
+                        prioritas: 'Tidak penting',
+                        catatan: 'Main Game',
+                    },
+                    {
+                        nama: 'Buat Tugas',
+                        prioritas: 'Penting',
+                        catatan: 'Tugas To Do List PAW',
+                    },
+                    {
+                        nama: 'Gambar',
+                        prioritas: 'Biasa',
+                        catatan: 'Menggambar',
+                    },
+                ],
+                item: {
+                    nama: '',
+                    prioritas: '',
+                    catatan: '',
+                }
+            },
+            methods: {
+                tambahTodo() {
+                    this.items.push({nama: this.item.nama, prioritas: this.item.prioritas, catatan: this.item.catatan});
+                    this.resetInput();
+                },
+                resetInput() {
+                    this.item.nama = '';
+                    this.item.prioritas = '';
+                    this.item.catatan = '';
+                },
+                hapusTodo(index) {
+                    this.items.splice(index, 1);
+                }
+            },
+        });
+        app.inisialisasi();
+    </script>
+
+    <style>
+        body {
+            background-color: rgb(255, 100, 120);
+        }
+        .container {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 7vh;
+            margin-bottom: 6vh;
+            padding: 40px 60px;
+            background-color: white;
+        }
+        .scrollable {
+            height: 500px;
+            overflow-y: auto;
+        }
+        .todoItem {
+            padding: 5px 20px;
+            border: 4px outset rgb(122, 167, 212);
+            border-radius: 5px;
+            word-wrap: normal;
+        }
+        .prioritas {
+            width: fit-content;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .penting {
+            padding: 2px;
+            border: 2px outset rgb(255, 0, 0);
+            color:rgb(255, 0, 0);
+            border-radius: 3px;
+        }
+        .tidakPenting {
+            padding: 2px;
+            border: 2px outset rgb(20, 200, 25);
+            color: rgb(20, 200, 25);
+            border-radius: 3px;
+        }
+        .biasa {
+            padding: 2px;
+            border: 2px outset rgb(20, 50, 160);
+            color: rgb(20, 50, 160);
+            border-radius: 3px;
+        }
+        .btn {
+            margin-right: 10px;
+       }
+        h1 {
+            color: rgb(15, 63, 110);
+            margin-bottom: 20px;
+        }
+        .footer {
+            display: inline-block;
+            background-color: rgb(7, 33, 59);
+            color: white;
+            width: 100%;
+        }
+        .footer p {
+            font-size: 16px;
+            text-align: center;
+            padding-top: 10px;
+        }
+    </style>
+</body>
+</html>
